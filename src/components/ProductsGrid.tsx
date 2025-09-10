@@ -1,6 +1,6 @@
 "use client";
 
-import { fetchProducts } from "@/lib/queries";
+import { fetchProducts, getBrands, getCategories } from "@/lib/queries";
 import { useQuery } from "@tanstack/react-query";
 import { ProductCard } from "./ProductCard";
 import { Input } from "./ui/input";
@@ -11,21 +11,23 @@ import debounce from "lodash.debounce";
 import FilterHub from "./FilterHub";
 
 export const ProductsGrid = () => {
-  const { searchQuery, setSearchQuery } = useFilterStore();
+  const { searchQuery, setSearchQuery, categories, brands } = useFilterStore();
   const [inputValue, setInputValue] = useState("");
 
   const { data } = useQuery({
-    queryKey: ["products", searchQuery],
-    queryFn: () => fetchProducts(searchQuery),
+    queryKey: ["products", searchQuery, categories, brands],
+    queryFn: () => fetchProducts(searchQuery, categories, brands),
   });
 
-  const brands = data?.products
-    ? Array.from(new Set(data.products.map((p) => p.brand).filter(Boolean)))
-    : [];
+  const { data: brandsData } = useQuery({
+    queryKey: ["brands"],
+    queryFn: () => getBrands(),
+  });
 
-  const categories = data?.products
-    ? Array.from(new Set(data.products.map((p) => p.category)))
-    : [];
+  const { data: categoriesData } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => getCategories(),
+  });
 
   const isFiltered = inputValue.trim() !== "" || searchQuery.trim() !== "";
 
@@ -64,7 +66,10 @@ export const ProductsGrid = () => {
         </Button>
       </div>
       <div>
-        <FilterHub productBrands={brands} productCategory={categories} />
+        <FilterHub
+          productBrands={brandsData}
+          productCategory={categoriesData}
+        />
       </div>
       <div>
         <ul className="grid gap-4 grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">

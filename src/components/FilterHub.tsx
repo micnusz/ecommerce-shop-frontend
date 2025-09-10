@@ -105,7 +105,7 @@ const FilterHub = ({ productBrands, productCategory }: TaskFilterProps) => {
 
                 <div className="border-t p-2">
                   <Button
-                    variant="secondary"
+                    variant={activeFiltersCount ? "destructive" : "muted"}
                     size="sm"
                     className="w-full"
                     onClick={() => {
@@ -122,8 +122,8 @@ const FilterHub = ({ productBrands, productCategory }: TaskFilterProps) => {
             {view === "brand" && (
               <>
                 <CommandGroup>
-                  <CommandItem onSelect={handleBack} className="p-2">
-                    <ChevronLeft className="" />
+                  <CommandItem onSelect={handleBack}>
+                    <ChevronLeft />
                     Back
                   </CommandItem>
                 </CommandGroup>
@@ -152,8 +152,8 @@ const FilterHub = ({ productBrands, productCategory }: TaskFilterProps) => {
             {view === "category" && (
               <>
                 <CommandGroup>
-                  <CommandItem onSelect={handleBack} className="p-2">
-                    <ChevronLeft className="" />
+                  <CommandItem onSelect={handleBack}>
+                    <ChevronLeft />
                     Back
                   </CommandItem>
                 </CommandGroup>
