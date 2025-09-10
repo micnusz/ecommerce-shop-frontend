@@ -144,6 +144,6 @@
 }
 
 .container-padding {
-  padding-inline: clamp(0.5rem, 2vw, 1rem);
-  padding-block: clamp(0.5rem, 2vw, 1rem);
+  padding-inline: clamp(1rem, 2vw, 12rem);
+  padding-block: clamp(1rem, 2vw, 12rem);
 }

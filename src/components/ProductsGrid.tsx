@@ -8,7 +8,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Button } from "./ui/button";
 import { useFilterStore } from "@/lib/store/useProductFilterStore";
 import debounce from "lodash.debounce";
-import { FilterHub } from "./FilterHub";
+import FilterHub from "./FilterHub";
 
 export const ProductsGrid = () => {
   const { searchQuery, setSearchQuery } = useFilterStore();
@@ -18,6 +18,14 @@ export const ProductsGrid = () => {
     queryKey: ["products", searchQuery],
     queryFn: () => fetchProducts(searchQuery),
   });
+
+  const brands = data?.products
+    ? Array.from(new Set(data.products.map((p) => p.brand).filter(Boolean)))
+    : [];
+
+  const categories = data?.products
+    ? Array.from(new Set(data.products.map((p) => p.category)))
+    : [];
 
   const isFiltered = inputValue.trim() !== "" || searchQuery.trim() !== "";
 
@@ -34,7 +42,7 @@ export const ProductsGrid = () => {
   }, [inputValue, debouncedSetSearch]);
 
   return (
-    <div className="flex flex-col gap-y-2">
+    <div className="flex flex-col gap-y-3">
       <div className="flex flex-row gap-x-2 items-center">
         <Input
           value={inputValue}
@@ -56,10 +64,10 @@ export const ProductsGrid = () => {
         </Button>
       </div>
       <div>
-        <FilterHub product={data?.products} />
+        <FilterHub productBrands={brands} productCategory={categories} />
       </div>
       <div>
-        <ul className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+        <ul className="grid gap-4 grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
           {data?.products.map((product) => (
             <ProductCard product={product} key={product.id} />
           ))}
