@@ -44,18 +44,18 @@ export const ProductsGrid = () => {
   }, [inputValue, debouncedSetSearch]);
 
   return (
-    <div className="flex flex-col gap-y-3">
+    <div className="flex flex-col gap-y-2">
       <div className="flex flex-row gap-x-2 items-center">
         <Input
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="Search for products."
-          className="w-64 h-9" // dopasowanie wysokości
+          className="w-64 h-9"
         />
         <Button
           size="sm"
           variant={isFiltered ? "destructive" : "muted"}
-          className="h-9" // dopasowanie do Input
+          className="h-9"
           onClick={() => {
             setInputValue("");
             debouncedSetSearch.cancel();

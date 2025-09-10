@@ -20,6 +20,11 @@ type FilterState = {
 
   // clear wszystkie filtry
   clearFilters: () => void;
+
+  clearBrands: (brands: string[]) => void;
+  clearCategories: (categories: string[]) => void;
+  clearPrices: (price: number) => void;
+  clearRatings: (rating: number) => void;
 };
 
 export const useFilterStore = create<FilterState>((set, get) => ({
@@ -73,6 +78,26 @@ export const useFilterStore = create<FilterState>((set, get) => ({
       categories: [],
       brands: [],
       prices: [],
+      ratings: [],
+    }),
+
+  clearCategories: () =>
+    set({
+      categories: [],
+    }),
+
+  clearBrands: () =>
+    set({
+      brands: [],
+    }),
+
+  clearPrices: () =>
+    set({
+      prices: [],
+    }),
+
+  clearRatings: () =>
+    set({
       ratings: [],
     }),
 }));

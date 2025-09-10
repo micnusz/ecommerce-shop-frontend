@@ -2,14 +2,12 @@
 
 import React, { useState } from "react";
 import {
-  ArrowDownUp,
-  CalendarSearch,
   Check,
   ChevronLeft,
   Filter,
   Library,
   LoaderCircle,
-  SeparatorHorizontal,
+  Tag,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -21,6 +19,7 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
+  CommandSeparator,
 } from "./ui/command";
 import { ScrollArea } from "./ui/scroll-area";
 import { useFilterStore } from "@/lib/store/useProductFilterStore";
@@ -31,8 +30,17 @@ type TaskFilterProps = {
 };
 
 const FilterHub = ({ productBrands, productCategory }: TaskFilterProps) => {
-  const { categories, toggleCategory, brands, toggleBrand, clearFilters } =
-    useFilterStore();
+  const {
+    categories,
+    toggleCategory,
+    brands,
+    toggleBrand,
+    clearFilters,
+    clearBrands,
+    clearCategories,
+    clearPrices,
+    clearRatings,
+  } = useFilterStore();
 
   const [open, setOpen] = useState(false);
   const [view, setView] = useState<"root" | "brand" | "category">("root");
@@ -66,68 +74,69 @@ const FilterHub = ({ productBrands, productCategory }: TaskFilterProps) => {
 
       <PopoverContent className="min-w-[15rem] w-fit max-w-[20rem] rounded-lg shadow-md p-1">
         <Command>
-          <ScrollArea className="max-h-[30rem] h-fit overflow-y-auto">
-            <CommandInput placeholder="Search filters..." />
-            <CommandEmpty>No results found.</CommandEmpty>
+          <CommandInput placeholder="Search filters..." />
+          <CommandEmpty>No results found.</CommandEmpty>
 
-            {/* ROOT VIEW */}
-            {view === "root" && (
-              <>
-                <CommandGroup>
-                  <CommandItem onSelect={() => setView("brand")}>
-                    {brands.length ? (
-                      <>
-                        <LoaderCircle className="text-muted-foreground" />
-                        Brand: {brands.join(", ")}
-                      </>
-                    ) : (
-                      <>
-                        <LoaderCircle className="text-muted-foreground" />
-                        Brand
-                      </>
-                    )}
-                  </CommandItem>
+          {/* ROOT VIEW */}
+          {view === "root" && (
+            <>
+              <CommandGroup>
+                <CommandItem onSelect={() => setView("brand")}>
+                  {brands.length ? (
+                    <>
+                      <Tag className="text-muted-foreground" />
+                      Brand: {brands.join(", ")}
+                    </>
+                  ) : (
+                    <>
+                      <Tag className="text-muted-foreground" />
+                      Brand
+                    </>
+                  )}
+                </CommandItem>
 
-                  <CommandItem onSelect={() => setView("category")}>
-                    {categories.length ? (
-                      <>
-                        <Library className="text-muted-foreground" /> Category:{" "}
-                        {categories.join(", ")}
-                      </>
-                    ) : (
-                      <>
-                        <Library className="text-muted-foreground" />
-                        Category
-                      </>
-                    )}
-                  </CommandItem>
-                </CommandGroup>
+                <CommandItem onSelect={() => setView("category")}>
+                  {categories.length ? (
+                    <>
+                      <Library className="text-muted-foreground" /> Category:{" "}
+                      {categories.join(", ")}
+                    </>
+                  ) : (
+                    <>
+                      <Library className="text-muted-foreground" />
+                      Category
+                    </>
+                  )}
+                </CommandItem>
+              </CommandGroup>
 
-                <div className="border-t p-2">
-                  <Button
-                    variant={activeFiltersCount ? "destructive" : "muted"}
-                    size="sm"
-                    className="w-full"
-                    onClick={() => {
-                      clearFilters();
-                    }}
-                  >
-                    Clear
-                  </Button>
-                </div>
-              </>
-            )}
+              <div className="p-2">
+                <Button
+                  variant={activeFiltersCount ? "destructive" : "muted"}
+                  size="sm"
+                  className="w-full"
+                  onClick={() => {
+                    clearFilters();
+                  }}
+                >
+                  Clear All
+                </Button>
+              </div>
+            </>
+          )}
 
-            {/* BRAND VIEW */}
-            {view === "brand" && (
-              <>
-                <CommandGroup>
-                  <CommandItem onSelect={handleBack}>
-                    <ChevronLeft />
-                    Back
-                  </CommandItem>
-                </CommandGroup>
-                <CommandGroup>
+          {/* BRAND VIEW */}
+          {view === "brand" && (
+            <>
+              <CommandGroup>
+                <CommandItem onSelect={handleBack}>
+                  <ChevronLeft />
+                  Back
+                </CommandItem>
+              </CommandGroup>
+              <CommandGroup>
+                <ScrollArea className="max-h-[20rem] h-fit overflow-y-auto">
+                  <CommandSeparator />
                   {(productBrands || []).map((brand) => {
                     const isSelected = brands.includes(brand);
                     return (
@@ -144,20 +153,35 @@ const FilterHub = ({ productBrands, productCategory }: TaskFilterProps) => {
                       </CommandItem>
                     );
                   })}
-                </CommandGroup>
-              </>
-            )}
+                </ScrollArea>
+              </CommandGroup>
+              <div className="p-2">
+                <Button
+                  variant={activeFiltersCount ? "destructive" : "muted"}
+                  size="sm"
+                  className="w-full"
+                  onClick={() => {
+                    clearBrands(brands);
+                  }}
+                >
+                  Clear
+                </Button>
+              </div>
+            </>
+          )}
 
-            {/* CATEGORY VIEW */}
-            {view === "category" && (
-              <>
-                <CommandGroup>
-                  <CommandItem onSelect={handleBack}>
-                    <ChevronLeft />
-                    Back
-                  </CommandItem>
-                </CommandGroup>
-                <CommandGroup>
+          {/* CATEGORY VIEW */}
+          {view === "category" && (
+            <>
+              <CommandGroup>
+                <CommandItem onSelect={handleBack}>
+                  <ChevronLeft />
+                  Back
+                </CommandItem>
+              </CommandGroup>
+              <CommandGroup>
+                <ScrollArea className="max-h-[20rem] h-fit overflow-y-auto">
+                  <CommandSeparator />
                   {(productCategory || []).map((category) => {
                     const isSelected = categories.includes(category);
                     return (
@@ -174,10 +198,22 @@ const FilterHub = ({ productBrands, productCategory }: TaskFilterProps) => {
                       </CommandItem>
                     );
                   })}
-                </CommandGroup>
-              </>
-            )}
-          </ScrollArea>
+                </ScrollArea>
+              </CommandGroup>
+              <div className="p-2">
+                <Button
+                  variant={activeFiltersCount ? "destructive" : "muted"}
+                  size="sm"
+                  className="w-full"
+                  onClick={() => {
+                    clearCategories(categories);
+                  }}
+                >
+                  Clear
+                </Button>
+              </div>
+            </>
+          )}
         </Command>
       </PopoverContent>
     </Popover>
