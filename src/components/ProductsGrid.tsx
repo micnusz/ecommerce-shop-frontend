@@ -11,8 +11,7 @@ import debounce from "lodash.debounce";
 import { FilterHub } from "./FilterHub";
 
 export const ProductsGrid = () => {
-  const { searchQuery, setSearchQuery, categories, toggleCategory } =
-    useFilterStore();
+  const { searchQuery, setSearchQuery } = useFilterStore();
   const [inputValue, setInputValue] = useState("");
 
   const { data } = useQuery({
