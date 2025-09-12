@@ -28,6 +28,7 @@ export type Product = {
   meta: Meta;
   images: string[];
   thumbnail: string;
+  slug: string;
 };
 
 export type Dimensions = {

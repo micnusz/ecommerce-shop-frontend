@@ -27,9 +27,20 @@ import { useFilterStore } from "@/lib/store/useProductFilterStore";
 type TaskFilterProps = {
   productBrands: string[];
   productCategory: string[];
+  isCategoriesLoading: boolean;
+  isBrandsLoading: boolean;
+  isBrandsError?: boolean;
+  isCategoriesError?: boolean;
 };
 
-const FilterHub = ({ productBrands, productCategory }: TaskFilterProps) => {
+const FilterHub = ({
+  productBrands,
+  productCategory,
+  isCategoriesLoading,
+  isBrandsLoading,
+  isBrandsError,
+  isCategoriesError,
+}: TaskFilterProps) => {
   const {
     categories,
     toggleCategory,
@@ -137,22 +148,34 @@ const FilterHub = ({ productBrands, productCategory }: TaskFilterProps) => {
               <CommandGroup>
                 <ScrollArea className="max-h-[20rem] h-fit overflow-y-auto">
                   <CommandSeparator />
-                  {(productBrands || []).map((brand) => {
-                    const isSelected = brands.includes(brand);
-                    return (
-                      <CommandItem
-                        key={brand}
-                        className={cn(
-                          "flex justify-between items-center my-1",
-                          isSelected ? "bg-accent/70" : ""
-                        )}
-                        onSelect={() => toggleBrand(brand)}
-                      >
-                        {brand}
-                        {isSelected && <Check className="w-4 h-4" />}
-                      </CommandItem>
-                    );
-                  })}
+                  {isBrandsLoading ? (
+                    <div className="flex justify-center py-4">
+                      <LoaderCircle className="h-5 w-5 animate-spin text-muted-foreground" />
+                    </div>
+                  ) : isBrandsError ? (
+                    <p className="text-red-500 p-2">error</p>
+                  ) : !productBrands?.length ? (
+                    <p className="text-muted-foreground p-2 text-sm">
+                      No brands available.
+                    </p>
+                  ) : (
+                    productBrands.map((brand) => {
+                      const isSelected = brands.includes(brand);
+                      return (
+                        <CommandItem
+                          key={brand}
+                          className={cn(
+                            "flex justify-between items-center my-1",
+                            isSelected ? "bg-accent/70" : ""
+                          )}
+                          onSelect={() => toggleBrand(brand)}
+                        >
+                          {brand}
+                          {isSelected && <Check className="w-4 h-4" />}
+                        </CommandItem>
+                      );
+                    })
+                  )}
                 </ScrollArea>
               </CommandGroup>
               <div className="p-2">
@@ -182,22 +205,34 @@ const FilterHub = ({ productBrands, productCategory }: TaskFilterProps) => {
               <CommandGroup>
                 <ScrollArea className="max-h-[20rem] h-fit overflow-y-auto">
                   <CommandSeparator />
-                  {(productCategory || []).map((category) => {
-                    const isSelected = categories.includes(category);
-                    return (
-                      <CommandItem
-                        key={category}
-                        className={cn(
-                          "flex justify-between items-center my-1",
-                          isSelected ? "bg-accent/70" : ""
-                        )}
-                        onSelect={() => toggleCategory(category)}
-                      >
-                        {category}
-                        {isSelected && <Check className="w-4 h-4" />}
-                      </CommandItem>
-                    );
-                  })}
+                  {isCategoriesLoading ? (
+                    <div className="flex justify-center py-4">
+                      <LoaderCircle className="h-5 w-5 animate-spin text-muted-foreground" />
+                    </div>
+                  ) : isCategoriesError ? (
+                    <p className="text-red-500 p-2">error</p>
+                  ) : !productCategory?.length ? (
+                    <p className="text-muted-foreground p-2 text-sm">
+                      No categories available.
+                    </p>
+                  ) : (
+                    productCategory.map((category) => {
+                      const isSelected = categories.includes(category);
+                      return (
+                        <CommandItem
+                          key={category}
+                          className={cn(
+                            "flex justify-between items-center my-1",
+                            isSelected ? "bg-accent/70" : ""
+                          )}
+                          onSelect={() => toggleCategory(category)}
+                        >
+                          {category}
+                          {isSelected && <Check className="w-4 h-4" />}
+                        </CommandItem>
+                      );
+                    })
+                  )}
                 </ScrollArea>
               </CommandGroup>
               <div className="p-2">

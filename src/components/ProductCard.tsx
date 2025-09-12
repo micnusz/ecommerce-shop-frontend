@@ -18,20 +18,21 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     return +(price * (1 - discountPercentage / 100)).toFixed(2);
   };
   return (
-    <Card className="flex flex-col rounded-lg shadow-lg overflow-hidden relative">
+    <Card className="flex flex-col rounded-lg shadow-lg overflow-hidden relative min-h-[30rem]">
       <div className="absolute top-2 right-2">
         <Badge variant="outline">{product.category}</Badge>
       </div>
-      <CardContent className="px-4 py-2 flex flex-col gap-y-6">
-        <div className="relative h-60 w-full overflow-hidden">
+      <CardContent className="flex flex-col px-4 py-2 gap-y-6 flex-1">
+        <div className="relative w-full h-42 flex items-center justify-center rounded-md overflow-hidden">
           <Image
             src={product.images[0]}
             alt={product.title}
-            fill
-            className="object-cover"
-            sizes="(max-width: 640px) 100vw, 25vw"
+            className="object-contain"
+            width={200}
+            height={200}
           />
         </div>
+
         <div className="flex flex-col gap-y-3">
           <div>
             <h3 className="text-sm text-gray-400">{product.brand}</h3>
@@ -54,7 +55,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             </p>
           </div>
         </div>
-        <div>
+        <div className="mt-auto">
           <Button
             className="rounded-2xl hover:bg-accent transition duration-300 "
             variant="destructive"
