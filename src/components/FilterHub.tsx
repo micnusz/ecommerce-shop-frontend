@@ -7,6 +7,7 @@ import {
   Filter,
   Library,
   LoaderCircle,
+  Star,
   Tag,
 } from "lucide-react";
 
@@ -23,6 +24,7 @@ import {
 } from "./ui/command";
 import { ScrollArea } from "./ui/scroll-area";
 import { useFilterStore } from "@/lib/store/useProductFilterStore";
+import { Slider } from "./ui/slider";
 
 type TaskFilterProps = {
   productBrands: string[];
@@ -43,22 +45,32 @@ const FilterHub = ({
 }: TaskFilterProps) => {
   const {
     categories,
-    toggleCategory,
     brands,
+    priceRange,
+    ratingRange,
+    toggleCategory,
     toggleBrand,
+    setPriceRange,
+    setRatingRange,
     clearFilters,
     clearBrands,
     clearCategories,
-    clearPrices,
-    clearRatings,
+    clearPriceRange,
+    clearRatingRange,
   } = useFilterStore();
 
   const [open, setOpen] = useState(false);
-  const [view, setView] = useState<"root" | "brand" | "category">("root");
+  const [view, setView] = useState<
+    "root" | "brand" | "category" | "price" | "rating"
+  >("root");
 
   const handleBack = () => setView("root");
 
-  const activeFiltersCount = (brands.length || 0) + (categories.length || 0);
+  const activeFiltersCount =
+    (brands.length || 0) +
+    (categories.length || 0) +
+    (priceRange?.length || 0) +
+    (ratingRange?.length || 0);
 
   const buttonLabel = activeFiltersCount
     ? `Filter By (${activeFiltersCount})`
@@ -116,6 +128,34 @@ const FilterHub = ({
                     <>
                       <Library className="text-muted-foreground" />
                       Category
+                    </>
+                  )}
+                </CommandItem>
+
+                <CommandItem onSelect={() => setView("price")}>
+                  {priceRange?.length ? (
+                    <>
+                      <Tag className="text-muted-foreground" /> Price:{" "}
+                      {`$${priceRange[0]} – $${priceRange[1]}`}
+                    </>
+                  ) : (
+                    <>
+                      <Tag className="text-muted-foreground" />
+                      Price
+                    </>
+                  )}
+                </CommandItem>
+
+                <CommandItem onSelect={() => setView("rating")}>
+                  {ratingRange?.length ? (
+                    <>
+                      <Star className="text-muted-foreground" /> Rating:{" "}
+                      {ratingRange?.join(" - ")}
+                    </>
+                  ) : (
+                    <>
+                      <Star className="text-muted-foreground" />
+                      Rating
                     </>
                   )}
                 </CommandItem>
@@ -243,6 +283,90 @@ const FilterHub = ({
                   onClick={() => {
                     clearCategories(categories);
                   }}
+                >
+                  Clear
+                </Button>
+              </div>
+            </>
+          )}
+
+          {/*PRICE VIEW */}
+          {view === "price" && (
+            <>
+              <CommandGroup>
+                <CommandItem onSelect={handleBack}>
+                  <ChevronLeft />
+                  Back
+                </CommandItem>
+              </CommandGroup>
+              <CommandGroup>
+                <ScrollArea className="max-h-[20rem] h-fit overflow-y-auto">
+                  <CommandItem className="py-6 flex flex-col gap-4">
+                    <p className="text-sm font-medium">
+                      {priceRange
+                        ? `$${priceRange[0]} – $${priceRange[1]}`
+                        : "Select price range"}
+                    </p>
+                    <Slider
+                      value={priceRange ?? [0, 1000]}
+                      min={0}
+                      max={1000}
+                      step={10}
+                      onValueChange={(val) =>
+                        setPriceRange(val as [number, number])
+                      }
+                    />
+                  </CommandItem>
+                </ScrollArea>
+              </CommandGroup>
+              <div className="p-2">
+                <Button
+                  variant={priceRange ? "destructive" : "muted"}
+                  size="sm"
+                  className="w-full"
+                  onClick={clearPriceRange}
+                >
+                  Clear
+                </Button>
+              </div>
+            </>
+          )}
+
+          {/*RATING VIEW */}
+          {view === "rating" && (
+            <>
+              <CommandGroup>
+                <CommandItem onSelect={handleBack}>
+                  <ChevronLeft />
+                  Back
+                </CommandItem>
+              </CommandGroup>
+              <CommandGroup>
+                <ScrollArea className="max-h-[20rem] h-fit overflow-y-auto">
+                  <CommandItem className="py-6 flex flex-col gap-4">
+                    <p className="text-sm font-medium">
+                      {ratingRange
+                        ? `${ratingRange[0]} – ${ratingRange[1]}`
+                        : "Select rating range"}
+                    </p>
+                    <Slider
+                      value={ratingRange ?? [0, 5]}
+                      min={0}
+                      max={5}
+                      step={0.1}
+                      onValueChange={(val) =>
+                        setRatingRange(val as [number, number])
+                      }
+                    />
+                  </CommandItem>
+                </ScrollArea>
+              </CommandGroup>
+              <div className="p-2">
+                <Button
+                  variant={ratingRange ? "destructive" : "muted"}
+                  size="sm"
+                  className="w-full"
+                  onClick={clearRatingRange}
                 >
                   Clear
                 </Button>

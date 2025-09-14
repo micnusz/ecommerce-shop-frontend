@@ -15,7 +15,15 @@ import { List, LoaderCircle } from "lucide-react";
 import Link from "next/link";
 
 export const ProductsGrid = () => {
-  const { searchQuery, setSearchQuery, categories, brands } = useFilterStore();
+  const {
+    searchQuery,
+    setSearchQuery,
+    categories,
+    brands,
+    ratings,
+    priceRange,
+    ratingRange,
+  } = useFilterStore();
   const [inputValue, setInputValue] = useState("");
 
   const {
@@ -24,8 +32,16 @@ export const ProductsGrid = () => {
     isError: isProductsError,
     error: productsError,
   } = useQuery({
-    queryKey: ["products", searchQuery, categories, brands],
-    queryFn: () => fetchProducts(searchQuery, categories, brands),
+    queryKey: [
+      "products",
+      searchQuery,
+      categories,
+      brands,
+      priceRange,
+      ratingRange,
+    ],
+    queryFn: () =>
+      fetchProducts(searchQuery, categories, brands, priceRange, ratingRange),
   });
 
   const {

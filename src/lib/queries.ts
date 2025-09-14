@@ -1,12 +1,13 @@
 // lib/queries.ts
 import { Product, ProductResponse } from "@/app/types/types";
 import axios from "./axios";
-import { useFilterStore } from "./store/useProductFilterStore";
 
 export const fetchProducts = async (
   searchQuery?: string,
   categories?: string[],
   brands?: string[],
+  priceRange?: [number, number] | null,
+  ratingRange?: [number, number] | null,
   skip = 0,
   limit = 20
 ): Promise<ProductResponse> => {
@@ -23,6 +24,16 @@ export const fetchProducts = async (
   brands?.forEach((b) => {
     url += `&brand=${encodeURIComponent(b)}`;
   });
+
+  if (priceRange) {
+    url += `&minPrice=${encodeURIComponent(priceRange[0])}`;
+    url += `&maxPrice=${encodeURIComponent(priceRange[1])}`;
+  }
+
+  if (ratingRange) {
+    url += `&minRating=${encodeURIComponent(ratingRange[0])}`;
+    url += `&maxRating=${encodeURIComponent(ratingRange[1])}`;
+  }
 
   console.log("fetchProducts URL:", url);
 

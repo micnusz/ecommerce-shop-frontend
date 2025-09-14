@@ -3,101 +3,82 @@ import { create } from "zustand";
 type FilterState = {
   searchQuery: string;
 
-  // nowe filtry
   categories: string[];
   brands: string[];
-  prices: number[];
   ratings: number[];
+  priceRange: [number, number] | null;
+  ratingRange: [number, number] | null;
 
-  // setter dla searchQuery
   setSearchQuery: (query: string) => void;
+  setPriceRange: (range: [number, number]) => void;
+  setRatingRange: (range: [number, number]) => void;
 
-  // toggle dla każdej listy
   toggleCategory: (category: string) => void;
   toggleBrand: (brand: string) => void;
-  togglePrice: (price: number) => void;
   toggleRating: (rating: number) => void;
 
-  // clear wszystkie filtry
   clearFilters: () => void;
 
-  clearBrands: (brands: string[]) => void;
-  clearCategories: (categories: string[]) => void;
-  clearPrices: (price: number) => void;
-  clearRatings: (rating: number) => void;
+  clearRatingRange: () => void;
+  clearPriceRange: () => void;
+  clearBrands: () => void;
+  clearCategories: () => void;
+  clearRatings: () => void;
 };
 
 export const useFilterStore = create<FilterState>((set, get) => ({
   searchQuery: "",
   categories: [],
   brands: [],
-  prices: [],
   ratings: [],
+  priceRange: null,
+  ratingRange: null,
 
   setSearchQuery: (query) => set({ searchQuery: query }),
 
   toggleCategory: (category) => {
     const { categories } = get();
-    if (categories.includes(category)) {
-      set({ categories: categories.filter((c) => c !== category) });
-    } else {
-      set({ categories: [...categories, category] });
-    }
+    set({
+      categories: categories.includes(category)
+        ? categories.filter((c) => c !== category)
+        : [...categories, category],
+    });
   },
 
   toggleBrand: (brand) => {
     const { brands } = get();
-    if (brands.includes(brand)) {
-      set({ brands: brands.filter((b) => b !== brand) });
-    } else {
-      set({ brands: [...brands, brand] });
-    }
-  },
-
-  togglePrice: (price) => {
-    const { prices } = get();
-    if (prices.includes(price)) {
-      set({ prices: prices.filter((p) => p !== price) });
-    } else {
-      set({ prices: [...prices, price] });
-    }
+    set({
+      brands: brands.includes(brand)
+        ? brands.filter((b) => b !== brand)
+        : [...brands, brand],
+    });
   },
 
   toggleRating: (rating) => {
     const { ratings } = get();
-    if (ratings.includes(rating)) {
-      set({ ratings: ratings.filter((r) => r !== rating) });
-    } else {
-      set({ ratings: [...ratings, rating] });
-    }
+    set({
+      ratings: ratings.includes(rating)
+        ? ratings.filter((r) => r !== rating)
+        : [...ratings, rating],
+    });
   },
+
+  setPriceRange: (range) => set({ priceRange: range }),
+  setRatingRange: (range) => set({ ratingRange: range }),
 
   clearFilters: () =>
     set({
       searchQuery: "",
       categories: [],
       brands: [],
-      prices: [],
       ratings: [],
+      priceRange: null,
+      ratingRange: null,
     }),
 
-  clearCategories: () =>
-    set({
-      categories: [],
-    }),
-
-  clearBrands: () =>
-    set({
-      brands: [],
-    }),
-
-  clearPrices: () =>
-    set({
-      prices: [],
-    }),
-
-  clearRatings: () =>
-    set({
-      ratings: [],
-    }),
+  clearCategories: () => set({ categories: [] }),
+  clearBrands: () => set({ brands: [] }),
+  clearRatings: () => set({ ratings: [] }),
+  clearPriceRange: () => set({ priceRange: null }),
+  clearRatingRange: () => set({ ratingRange: null }),
 }));
