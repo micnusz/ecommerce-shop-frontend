@@ -13,6 +13,8 @@ import { Skeleton } from "./ui/skeleton";
 
 import { List, LoaderCircle } from "lucide-react";
 import Link from "next/link";
+import { SortHub } from "./SortHub";
+import { useSortStore } from "@/lib/store/useProductSortStore";
 
 export const ProductsGrid = () => {
   const {
@@ -20,10 +22,11 @@ export const ProductsGrid = () => {
     setSearchQuery,
     categories,
     brands,
-    ratings,
     priceRange,
     ratingRange,
   } = useFilterStore();
+
+  const { sortBy, sortOrder } = useSortStore();
   const [inputValue, setInputValue] = useState("");
 
   const {
@@ -39,9 +42,19 @@ export const ProductsGrid = () => {
       brands,
       priceRange,
       ratingRange,
+      sortBy,
+      sortOrder,
     ],
     queryFn: () =>
-      fetchProducts(searchQuery, categories, brands, priceRange, ratingRange),
+      fetchProducts(
+        searchQuery,
+        categories,
+        brands,
+        priceRange,
+        ratingRange,
+        sortBy,
+        sortOrder
+      ),
   });
 
   const {
@@ -100,14 +113,17 @@ export const ProductsGrid = () => {
         </Button>
       </div>
       <div className="flex flex-row items-center justify-between">
-        <FilterHub
-          productBrands={brandsData}
-          productCategory={categoriesData}
-          isCategoriesLoading={isCategoriesLoading}
-          isBrandsLoading={isBrandsLoading}
-          isBrandsError={brandsError}
-          isCategoriesError={categoriesError}
-        />
+        <div className="flex flex-row gap-x-2">
+          <FilterHub
+            productBrands={brandsData}
+            productCategory={categoriesData}
+            isCategoriesLoading={isCategoriesLoading}
+            isBrandsLoading={isBrandsLoading}
+            isBrandsError={brandsError}
+            isCategoriesError={categoriesError}
+          />
+          <SortHub />
+        </div>
 
         <div className="flex flex-row items-center gap-x-1 text-muted-foreground text-sm">
           {isProductsLoading ? (

@@ -8,6 +8,8 @@ export const fetchProducts = async (
   brands?: string[],
   priceRange?: [number, number] | null,
   ratingRange?: [number, number] | null,
+  sortBy?: string,
+  sortOrder?: string,
   skip = 0,
   limit = 20
 ): Promise<ProductResponse> => {
@@ -33,6 +35,14 @@ export const fetchProducts = async (
   if (ratingRange) {
     url += `&minRating=${encodeURIComponent(ratingRange[0])}`;
     url += `&maxRating=${encodeURIComponent(ratingRange[1])}`;
+  }
+
+  if (sortBy?.trim()) {
+    url += `&sortBy=${encodeURIComponent(sortBy.trim())}`;
+  }
+
+  if (sortOrder?.trim()) {
+    url += `&order=${encodeURIComponent(sortOrder.trim())}`;
   }
 
   console.log("fetchProducts URL:", url);

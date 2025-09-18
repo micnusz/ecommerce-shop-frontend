@@ -224,7 +224,7 @@ const FilterHub = ({
                   size="sm"
                   className="w-full"
                   onClick={() => {
-                    clearBrands(brands);
+                    clearBrands();
                   }}
                 >
                   Clear
@@ -281,7 +281,7 @@ const FilterHub = ({
                   size="sm"
                   className="w-full"
                   onClick={() => {
-                    clearCategories(categories);
+                    clearCategories();
                   }}
                 >
                   Clear
@@ -290,7 +290,7 @@ const FilterHub = ({
             </>
           )}
 
-          {/*PRICE VIEW */}
+          {/* PRICE VIEW */}
           {view === "price" && (
             <>
               <CommandGroup>
@@ -332,7 +332,7 @@ const FilterHub = ({
             </>
           )}
 
-          {/*RATING VIEW */}
+          {/* RATING VIEW */}
           {view === "rating" && (
             <>
               <CommandGroup>
@@ -347,7 +347,7 @@ const FilterHub = ({
                     <p className="text-sm font-medium">
                       {ratingRange
                         ? `${ratingRange[0]} – ${ratingRange[1]}`
-                        : "Select rating range"}
+                        : "Select rating range (0 - 5)"}
                     </p>
                     <Slider
                       value={ratingRange ?? [0, 5]}
