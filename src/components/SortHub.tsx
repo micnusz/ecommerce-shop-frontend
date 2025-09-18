@@ -3,7 +3,15 @@
 import { useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
-import { Check, Filter, MoveRight, Tag } from "lucide-react";
+import {
+  ArrowDownUp,
+  Check,
+  Filter,
+  MoveRight,
+  Star,
+  Tag,
+  TextSearch,
+} from "lucide-react";
 import {
   Command,
   CommandEmpty,
@@ -19,7 +27,6 @@ export const SortHub = () => {
 
   const [open, setOpen] = useState(false);
 
-  // 🟢 Teksty do przycisku
   let buttonLabel = "Sort By";
   if (sortBy === "title") {
     buttonLabel = sortOrder === "ASC" ? "Title (A → Z)" : "Title (Z → A)";
@@ -44,7 +51,7 @@ export const SortHub = () => {
           variant={sortBy ? "default" : "muted"}
           className="justify-between"
         >
-          <Filter className="h-4 w-4" />
+          <ArrowDownUp className="h-4 w-4" />
           {buttonLabel}
         </Button>
       </PopoverTrigger>
@@ -55,16 +62,17 @@ export const SortHub = () => {
           <CommandEmpty>No results found.</CommandEmpty>
 
           <CommandGroup>
+            {/* TITLE */}
             <CommandItem
               onSelect={() => {
                 setSortBy("title");
                 setSortOrder("ASC");
               }}
             >
-              <Tag className="text-muted-foreground" />
+              <TextSearch className="text-muted-foreground" />
               Title (A <MoveRight className="mx-1 text-foreground" /> Z)
               {sortBy === "title" && sortOrder === "ASC" && (
-                <Check className="ml-auto h-4 w-4 text-primary" />
+                <Check className="ml-auto h-4 w-4" />
               )}
             </CommandItem>
 
@@ -74,10 +82,66 @@ export const SortHub = () => {
                 setSortOrder("DESC");
               }}
             >
-              <Tag className="text-muted-foreground" />
+              <TextSearch className="text-muted-foreground" />
               Title (Z <MoveRight className="mx-1 text-foreground" /> A)
               {sortBy === "title" && sortOrder === "DESC" && (
-                <Check className="ml-auto h-4 w-4 text-primary" />
+                <Check className="ml-auto h-4 w-4" />
+              )}
+            </CommandItem>
+
+            {/* PRICE */}
+            <CommandItem
+              onSelect={() => {
+                setSortBy("price");
+                setSortOrder("ASC");
+              }}
+            >
+              <Tag className="text-muted-foreground" />
+              Price (Low <MoveRight className="mx-1 text-foreground" />
+              High)
+              {sortBy === "price" && sortOrder === "ASC" && (
+                <Check className="ml-auto h-4 w-4 " />
+              )}
+            </CommandItem>
+            <CommandItem
+              onSelect={() => {
+                setSortBy("price");
+                setSortOrder("DESC");
+              }}
+            >
+              <Tag className="text-muted-foreground" />
+              Price (High <MoveRight className="mx-1 text-foreground" />
+              Low)
+              {sortBy === "price" && sortOrder === "DESC" && (
+                <Check className="ml-auto h-4 w-4 " />
+              )}
+            </CommandItem>
+
+            {/* RATING */}
+            <CommandItem
+              onSelect={() => {
+                setSortBy("rating");
+                setSortOrder("ASC");
+              }}
+            >
+              <Star className="text-muted-foreground" />
+              Rating (Low <MoveRight className="mx-1 text-foreground" />
+              High)
+              {sortBy === "rating" && sortOrder === "ASC" && (
+                <Check className="ml-auto h-4 w-4 " />
+              )}
+            </CommandItem>
+            <CommandItem
+              onSelect={() => {
+                setSortBy("rating");
+                setSortOrder("DESC");
+              }}
+            >
+              <Star className="text-muted-foreground" />
+              Rating (High <MoveRight className="mx-1 text-foreground" />
+              Low)
+              {sortBy === "rating" && sortOrder === "DESC" && (
+                <Check className="ml-auto h-4 w-4" />
               )}
             </CommandItem>
           </CommandGroup>
