@@ -15,8 +15,11 @@ import { List, LoaderCircle } from "lucide-react";
 import Link from "next/link";
 import { SortHub } from "./SortHub";
 import { useSortStore } from "@/lib/store/useProductSortStore";
+import { usePaginationStore } from "@/lib/store/useProductPaginationStore";
+import { ProductsPagination } from "./ProductsPagination";
 
 export const ProductsGrid = () => {
+  //Zustand store
   const {
     searchQuery,
     setSearchQuery,
@@ -25,8 +28,11 @@ export const ProductsGrid = () => {
     priceRange,
     ratingRange,
   } = useFilterStore();
-
+  //Zustand store
   const { sortBy, sortOrder } = useSortStore();
+  const { pageIndex, limit } = usePaginationStore();
+  const skip = pageIndex * limit;
+
   const [inputValue, setInputValue] = useState("");
 
   const {
@@ -44,6 +50,8 @@ export const ProductsGrid = () => {
       ratingRange,
       sortBy,
       sortOrder,
+      skip,
+      limit,
     ],
     queryFn: () =>
       fetchProducts(
@@ -53,7 +61,9 @@ export const ProductsGrid = () => {
         priceRange,
         ratingRange,
         sortBy,
-        sortOrder
+        sortOrder,
+        skip,
+        limit
       ),
   });
 
@@ -160,15 +170,17 @@ export const ProductsGrid = () => {
           <ul className="grid gap-4 grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {productsData?.products?.length ? (
               productsData.products.map((product) => (
-                <Link href={`/products/${product.slug}`} key={product.id}>
-                  <ProductCard product={product} />
-                </Link>
+                <ProductCard product={product} key={product.id} />
               ))
             ) : (
               <p>No products available.</p>
             )}
           </ul>
         )}
+      </div>
+
+      <div>
+        <ProductsPagination totalCount={productsData?.total ?? 0} />
       </div>
     </div>
   );

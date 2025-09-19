@@ -10,8 +10,8 @@ export const fetchProducts = async (
   ratingRange?: [number, number] | null,
   sortBy?: string,
   sortOrder?: string,
-  skip = 0,
-  limit = 20
+  skip?: number,
+  limit?: number
 ): Promise<ProductResponse> => {
   let url = `/products?skip=${skip}&limit=${limit}`;
 

@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Badge } from "./ui/badge";
 import { RatingStars } from "./RatingStars";
 import { useCartStore } from "@/lib/store/useStore";
+import Link from "next/link";
 
 type ProductCardProps = {
   product: Product;
@@ -22,21 +23,28 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       <div className="absolute top-2 right-2">
         <Badge variant="outline">{product.category}</Badge>
       </div>
+
       <CardContent className="flex flex-col px-4 py-2 gap-y-6 flex-1">
-        <div className="relative w-full h-42 flex items-center justify-center rounded-md overflow-hidden">
-          <Image
-            src={product.images[0]}
-            alt={product.title}
-            className="object-contain"
-            width={200}
-            height={200}
-          />
-        </div>
+        <Link href={`/products/${product.slug}`}>
+          <div className="relative w-full h-42 flex items-center justify-center rounded-md overflow-hidden">
+            <Image
+              src={product.images[0]}
+              alt={product.title}
+              className="object-contain"
+              width={200}
+              height={200}
+            />
+          </div>
+        </Link>
 
         <div className="flex flex-col gap-y-3">
           <div>
             <h3 className="text-sm text-gray-400">{product.brand}</h3>
-            <h3 className="text-md font-semibold">{product.title}</h3>
+            <Link href={`/products/${product.slug}`}>
+              <h3 className="text-md font-semibold hover:text-gray-300">
+                {product.title}
+              </h3>
+            </Link>
           </div>
           <div className="flex flex-row gap-x-2">
             <span>

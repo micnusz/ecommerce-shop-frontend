@@ -5,12 +5,11 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
 import {
   ArrowDownUp,
+  CaseSensitive,
   Check,
-  Filter,
   MoveRight,
   Star,
   Tag,
-  TextSearch,
 } from "lucide-react";
 import {
   Command,
@@ -69,7 +68,7 @@ export const SortHub = () => {
                 setSortOrder("ASC");
               }}
             >
-              <TextSearch className="text-muted-foreground" />
+              <CaseSensitive className="text-muted-foreground" />
               Title (A <MoveRight className="mx-1 text-foreground" /> Z)
               {sortBy === "title" && sortOrder === "ASC" && (
                 <Check className="ml-auto h-4 w-4" />
@@ -82,7 +81,7 @@ export const SortHub = () => {
                 setSortOrder("DESC");
               }}
             >
-              <TextSearch className="text-muted-foreground" />
+              <CaseSensitive className="text-muted-foreground" />
               Title (Z <MoveRight className="mx-1 text-foreground" /> A)
               {sortBy === "title" && sortOrder === "DESC" && (
                 <Check className="ml-auto h-4 w-4" />
