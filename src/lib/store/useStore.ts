@@ -8,7 +8,7 @@ type CartItem = Product & {
 
 type CartState = {
   items: CartItem[];
-  addItem: (product: Product) => void;
+  addItem: (product: Product, quantity?: number) => void; // quantity opcjonalnie
   removeItem: (productId: number) => void;
   clearCart: () => void;
 };
@@ -18,17 +18,17 @@ export const useCartStore = create(
     (set) => ({
       items: [],
 
-      addItem: (product) =>
+      addItem: (product, quantity = 1) =>
         set((state) => {
           const index = state.items.findIndex((item) => item.id === product.id);
 
           if (index > -1) {
             const updatedItems = [...state.items];
-            updatedItems[index].quantity += 1;
+            updatedItems[index].quantity += quantity;
             return { items: updatedItems };
           }
 
-          return { items: [...state.items, { ...product, quantity: 1 }] };
+          return { items: [...state.items, { ...product, quantity }] };
         }),
 
       removeItem: (productId) =>

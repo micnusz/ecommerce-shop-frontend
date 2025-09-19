@@ -61,6 +61,11 @@ export const fetchProductById = async (id: number): Promise<Product> => {
   return data;
 };
 
+export const fetchProductBySlug = async (slug: string): Promise<Product> => {
+  const { data } = await axios.get(`/products/slug/${slug}`);
+  return data;
+};
+
 export const getBrands = async () => {
   try {
     const { data } = await axios.get("/products/brands");
