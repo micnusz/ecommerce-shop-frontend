@@ -7,6 +7,7 @@ import { Badge } from "./ui/badge";
 import { RatingStars } from "./RatingStars";
 import { useCartStore } from "@/lib/store/useStore";
 import Link from "next/link";
+import { capitalizeCategory } from "@/lib/utils/capitalizeCategory";
 
 type ProductCardProps = {
   product: Product;
@@ -21,7 +22,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   return (
     <Card className="flex flex-col rounded-lg shadow-lg overflow-hidden relative min-h-[30rem]">
       <div className="absolute top-2 right-2">
-        <Badge variant="outline">{product.category}</Badge>
+        <Badge variant="outline">{capitalizeCategory(product.category)}</Badge>
       </div>
 
       <CardContent className="flex flex-col px-4 py-2 gap-y-6 flex-1">
