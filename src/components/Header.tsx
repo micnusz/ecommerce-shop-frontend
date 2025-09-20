@@ -113,7 +113,9 @@ export const Header = () => {
                     <p className="text-right font-bold text-lg">
                       Total: ${totalPrice.toFixed(2)}
                     </p>
-                    <Button className="w-full">Proceed to Checkout</Button>
+                    <Link href={`/checkouts`}>
+                      <Button className="w-full">Proceed to Checkout</Button>
+                    </Link>
                   </div>
                 )}
               </div>

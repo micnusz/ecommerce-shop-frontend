@@ -4,19 +4,25 @@ import { useCartStore } from "@/lib/store/useStore";
 import { Button } from "./ui/button";
 import { X } from "lucide-react";
 import Link from "next/link";
+import { useCheckoutStore } from "@/lib/store/useCheckoutShippingStore";
 
 export const CheckoutPaymentCartView = () => {
+  const { shippingMethods, selectedShippingMethod } = useCheckoutStore();
   const cartItems = useCartStore((state) => state.items);
 
-  const finalPrice = (price: number, quantity: number): number =>
-    price * quantity;
+  const shippingPrice = selectedShippingMethod?.price || 0;
 
-  const totalPrice = cartItems.reduce(
-    (sum, item) => sum + finalPrice(item.price, item.quantity),
+  // Subtotal = suma produktów
+  const subtotal = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
     0
   );
+
+  // Total = subtotal + shipping
+  const totalPrice = subtotal + shippingPrice;
+
   return (
-    <div className="flex flex-col gap-4 ">
+    <div className="flex flex-col gap-4">
       {cartItems.length === 0 && <p>Your cart is empty.</p>}
 
       {cartItems.map((item) => (
@@ -34,34 +40,35 @@ export const CheckoutPaymentCartView = () => {
           </div>
           <div className="flex items-center gap-2">
             <p className="font-bold">
-              ${finalPrice(item.price, item.quantity).toFixed(2)}
+              ${(item.price * item.quantity).toFixed(2)}
             </p>
-            <Button
-              onClick={() => useCartStore.getState().removeItem(item.id)}
-              size="icon"
-              className="text-gray-400 hover:text-gray-200 rounded-2xl"
-              variant="ghost"
-            >
-              <X size={18} />
-            </Button>
           </div>
         </div>
       ))}
 
       {cartItems.length > 0 && (
         <div className="mt-4 flex flex-col gap-2">
+          {/* Subtotal */}
           <div className="flex flex-row gap-x-2 justify-between text-md text-gray-400">
-            {cartItems.length == 1 ? (
-              <span>Subtotal · {cartItems.length} item</span>
-            ) : (
-              <span>Subtotal · {cartItems.length} items</span>
-            )}
-            <p>${totalPrice.toFixed(2)}</p>
+            <span>
+              Subtotal · {cartItems.length}{" "}
+              {cartItems.length === 1 ? "item" : "items"}
+            </span>
+            <p>${subtotal.toFixed(2)}</p>
           </div>
+
+          {/* Shipping */}
+          <div className="flex flex-row gap-x-2 justify-between text-md text-gray-400">
+            <span>Shipping:</span>
+            <p>${shippingPrice.toFixed(2)}</p>
+          </div>
+
+          {/* Total */}
           <div className="flex justify-between font-bold">
             <h1 className="text-xl">Total:</h1>
             <h1 className="text-xl">${totalPrice.toFixed(2)}</h1>
           </div>
+
           <Button className="w-full">Pay now</Button>
         </div>
       )}

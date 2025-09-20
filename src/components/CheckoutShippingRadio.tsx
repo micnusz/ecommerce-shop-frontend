@@ -39,7 +39,7 @@ export const CheckoutShippingRadio = () => {
               checked={selectedShippingMethod?.id === method.id}
               className="pointer-events-none"
             />
-            <div className="flex flex-row justify-between">
+            <div className="flex flex-row justify-between w-full">
               <span>{method.name} Shipping</span>
               <span>${method.price}</span>
             </div>
