@@ -110,9 +110,7 @@ export const ProductPage = ({ slug }: ProductPageProps) => {
         {/* Prawa kolumna: info */}
         <div className="w-full md:w-1/2 flex flex-col gap-4">
           <div>
-            <h1 className="text-3xl font-bold break-all w-full">
-              {product.title}
-            </h1>
+            <h1 className="text-3xl font-bold w-full">{product.title}</h1>
             <h2 className="text-lg text-gray-400">{product.brand}</h2>
           </div>
 
