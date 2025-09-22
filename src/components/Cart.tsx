@@ -13,10 +13,17 @@ import Link from "next/link";
 import { useCartStore } from "@/lib/store/useStore";
 import Image from "next/image";
 import { ScrollArea } from "./ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export const Cart = () => {
   const cartItems = useCartStore((state) => state.items);
-
+  const updateQuantity = useCartStore((state) => state.updateQuantity);
   const finalPrice = (price: number, quantity: number): number =>
     price * quantity;
 
@@ -27,13 +34,12 @@ export const Cart = () => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost">
+        <Button variant="ghost" size="lg" className="p-3">
           <div className="relative">
-            <ShoppingCart className="text-white" />
-
+            <ShoppingCart className="!size-6" />
             {cartItems.length > 0 && (
               <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                {cartItems.reduce((sum, item) => sum + item.quantity, 0)}
+                {cartItems.length}
               </span>
             )}
           </div>
@@ -47,7 +53,7 @@ export const Cart = () => {
         <div>
           <DialogTitle>
             {cartItems.length != 0 ? (
-              <span>Your Cart: {cartItems.length} items</span>
+              <span>Your Cart: {cartItems.length} products</span>
             ) : (
               <span>Your Cart:</span>
             )}
@@ -93,9 +99,28 @@ export const Cart = () => {
                   <p className="font-semibold text-sm line-clamp-2">
                     {item.title}
                   </p>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Quantity: {item.quantity} × ${item.price.toFixed(2)}
-                  </p>
+                  <div className="flex flex-row items-center gap-x-2">
+                    <p className="text-sm text-muted-foreground">Quantity: </p>
+                    <Select
+                      value={String(item.quantity)} // ustawiamy domyślną wartość na item.quantity
+                      onValueChange={(value) =>
+                        updateQuantity(item.id, Number(value))
+                      } // aktualizacja stanu
+                    >
+                      <SelectTrigger className="text-xs p-1 ">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Array.from({ length: 10 }, (_, i) => i + 1).map(
+                          (num) => (
+                            <SelectItem key={num} value={String(num)}>
+                              {num}
+                            </SelectItem>
+                          )
+                        )}
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
 
                 {/* Cena i przycisk */}

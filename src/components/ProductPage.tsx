@@ -23,6 +23,14 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
+import { LoadingSpinner } from "@/lib/utils/LoadingSpinner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 type ProductPageProps = {
   slug: string;
@@ -51,7 +59,7 @@ export const ProductPage = ({ slug }: ProductPageProps) => {
   if (isLoading || !product) {
     return (
       <div className="flex items-center justify-center py-16">
-        <span className="text-gray-500 animate-pulse">Loading product...</span>
+        <LoadingSpinner />
       </div>
     );
   }
@@ -133,15 +141,31 @@ export const ProductPage = ({ slug }: ProductPageProps) => {
               <span className="text-gray-400">{product.stock}</span>)
             </span>
 
-            <div className="flex flex-row gap-x-2 items-center ">
+            <div className="flex flex-row gap-x-2 items-center">
               <span>Quantity:</span>
-              <input
-                type="number"
-                min={1}
-                value={quantity}
-                onChange={(e) => setQuantity(Number(e.target.value))}
-                className="w-16 border rounded px-2 py-1 text-center"
-              />
+
+              <Select
+                value={String(quantity)}
+                onValueChange={(value) => setQuantity(Number(value))}
+              >
+                <SelectTrigger className="text-sm p-2 w-16">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className=" shadow-md max-h-60">
+                  {Array.from(
+                    { length: Math.min(product.stock) },
+                    (_, i) => i + 1
+                  ).map((num) => (
+                    <SelectItem
+                      key={num}
+                      value={String(num)}
+                      className="text-sm px-2 py-1 hover:bg-gray-100 rounded"
+                    >
+                      {num}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <Button onClick={() => addItem(product, quantity)}>

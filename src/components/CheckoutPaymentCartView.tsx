@@ -2,12 +2,12 @@
 
 import { useCartStore } from "@/lib/store/useStore";
 import { Button } from "./ui/button";
-import { X } from "lucide-react";
+import { BaggageClaim, X } from "lucide-react";
 import Link from "next/link";
 import { useCheckoutStore } from "@/lib/store/useCheckoutShippingStore";
 
 export const CheckoutPaymentCartView = () => {
-  const { shippingMethods, selectedShippingMethod } = useCheckoutStore();
+  const { selectedShippingMethod } = useCheckoutStore();
   const cartItems = useCartStore((state) => state.items);
 
   const shippingPrice = selectedShippingMethod?.price || 0;
@@ -23,7 +23,18 @@ export const CheckoutPaymentCartView = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      {cartItems.length === 0 && <p>Your cart is empty.</p>}
+      {cartItems.length === 0 && (
+        <div className="flex flex-col items-center gap-y-1">
+          <BaggageClaim className="w-24 h-24 text-muted-foreground" />
+
+          <p className="text-center text-muted-foreground py-10">
+            Your cart is currently empty.
+          </p>
+          <Link href={`/`}>
+            <Button>Start shopping</Button>
+          </Link>
+        </div>
+      )}
 
       {cartItems.map((item) => (
         <div

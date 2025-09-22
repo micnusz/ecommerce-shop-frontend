@@ -30,7 +30,7 @@ import { Cart } from "./Cart";
 
 export const Header = () => {
   return (
-    <header className="h-16 bg-muted-background flex items-center justify-between px-6 shadow-md border-b-1">
+    <header className="h-18 bg-muted-background flex items-center justify-between px-6 shadow-md border-b-1">
       {/* Shop name */}
       <Link href={"/"}>
         <h1 className="text-xl font-bold text-white hover:text-destructive transition duration-150">
@@ -40,37 +40,7 @@ export const Header = () => {
 
       {/* Cart with Sheet */}
       <div className="flex flex-row gap-x-1 items-center">
-        <div>
-          <Cart />
-        </div>
-
-        <div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost">
-                <MoreVerticalIcon />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuLabel className="text-muted-foreground">
-                More
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <a
-                  href="https://github.com/micnusz"
-                  target="_blank" // otwiera w nowej karcie
-                  rel="noopener noreferrer" // bezpieczeństwo przy target="_blank"
-                  className="flex flex-row gap-x-1"
-                  role="menuitem" // ARIA
-                  aria-label="Open GitHub in a new tab"
-                >
-                  <Github className="text-foreground" /> GitHub
-                </a>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        <Cart />
       </div>
     </header>
   );

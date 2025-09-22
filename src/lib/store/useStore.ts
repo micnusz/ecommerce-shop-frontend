@@ -8,9 +8,10 @@ type CartItem = Product & {
 
 type CartState = {
   items: CartItem[];
-  addItem: (product: Product, quantity?: number) => void; // quantity opcjonalnie
+  addItem: (product: Product, quantity?: number) => void;
   removeItem: (productId: number) => void;
   clearCart: () => void;
+  updateQuantity: (productId: number, quantity: number) => void; // nowa funkcja
 };
 
 export const useCartStore = create(
@@ -21,7 +22,6 @@ export const useCartStore = create(
       addItem: (product, quantity = 1) =>
         set((state) => {
           const validQuantity = Math.max(1, quantity);
-
           const index = state.items.findIndex((item) => item.id === product.id);
 
           if (index > -1) {
@@ -41,6 +41,16 @@ export const useCartStore = create(
         })),
 
       clearCart: () => set({ items: [] }),
+
+      // ===== nowa funkcja =====
+      updateQuantity: (productId, quantity) =>
+        set((state) => {
+          const validQuantity = Math.max(1, quantity); // minimalna 1
+          const updatedItems = state.items.map((item) =>
+            item.id === productId ? { ...item, quantity: validQuantity } : item
+          );
+          return { items: updatedItems };
+        }),
     }),
     {
       name: "cart-storage",
