@@ -17,23 +17,33 @@ import { SortHub } from "./SortHub";
 import { useSortStore } from "@/lib/store/useProductSortStore";
 import { usePaginationStore } from "@/lib/store/useProductPaginationStore";
 import { ProductsPagination } from "./ProductsPagination";
+import { useSearchParams } from "next/navigation";
 
 export const ProductsGrid = () => {
-  //Zustand store
+  //Filter store
   const {
     searchQuery,
-    setSearchQuery,
     categories,
     brands,
+    ratings,
     priceRange,
     ratingRange,
+    setSearchQuery,
+    toggleCategory,
+    toggleBrand,
+    toggleRating,
+    setPriceRange,
+    setRatingRange,
+    clearFilters,
   } = useFilterStore();
-  //Zustand store
+  //Sort Store
   const { sortBy, sortOrder } = useSortStore();
+  //Pagination Store
   const { pageIndex, limit } = usePaginationStore();
   const skip = pageIndex * limit;
 
   const [inputValue, setInputValue] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const {
     data: productsData,
@@ -150,7 +160,7 @@ export const ProductsGrid = () => {
       <div>
         {isProductsLoading && (
           <ul className="grid gap-4 grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-            {Array.from({ length: 12 }).map((_, i) => (
+            {Array.from({ length: limit }).map((_, i) => (
               <li key={i} className="flex flex-col gap-2">
                 <Skeleton className="w-full h-[32rem] rounded-lg" />
               </li>
