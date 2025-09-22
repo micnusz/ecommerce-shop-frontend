@@ -64,7 +64,7 @@ export const Cart = () => {
         </div>
 
         <div className="mt-4 flex flex-col gap-4">
-          <ScrollArea className="max-h-92">
+          <ScrollArea className="max-h-112">
             {cartItems.length === 0 && (
               <div className="flex flex-col items-center gap-y-1">
                 <BaggageClaim className="w-24 h-24 text-muted-foreground" />
@@ -110,14 +110,15 @@ export const Cart = () => {
                       <SelectTrigger className="text-xs p-1 ">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent>
-                        {Array.from({ length: 10 }, (_, i) => i + 1).map(
-                          (num) => (
-                            <SelectItem key={num} value={String(num)}>
-                              {num}
-                            </SelectItem>
-                          )
-                        )}
+                      <SelectContent className="max-h-64">
+                        {Array.from(
+                          { length: item.stock },
+                          (_, i) => i + 1
+                        ).map((num) => (
+                          <SelectItem key={num} value={String(num)}>
+                            {num}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>

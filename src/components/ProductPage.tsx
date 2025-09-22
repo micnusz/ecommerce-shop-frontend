@@ -140,7 +140,6 @@ export const ProductPage = ({ slug }: ProductPageProps) => {
               {product.availabilityStatus} (
               <span className="text-gray-400">{product.stock}</span>)
             </span>
-
             <div className="flex flex-row gap-x-2 items-center">
               <span>Quantity:</span>
 
@@ -168,7 +167,7 @@ export const ProductPage = ({ slug }: ProductPageProps) => {
               </Select>
             </div>
 
-            <Button onClick={() => addItem(product, quantity)}>
+            <Button className="mt-6" onClick={() => addItem(product, quantity)}>
               Add to cart
             </Button>
           </div>
